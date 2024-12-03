@@ -44,3 +44,39 @@
 
 <p>참고로, "DA"는 크로아티어어로 "YES"를, "NE"는 "NO"를 의미한다.</p>
 
+---
+
+### 소감
+
+***1) 문법***
+  * 앞 패턴과 * 뒤 패턴을 추출해서 문자에 패턴들이 있는지 확인하는 문제이다. 따라서 문자의 인덱스를 설정하고 substring.equals를 사용하였다. But,, startsWith, endsWith
+     내장함수가 존재하였다. 이거 쓰자!
+    <리팩토링 전>
+     ``` java
+     
+     int endPatternStartIdx=word.length()-endPatternSize;
+        if(word.substring(0,idx).equals(startPattern)&& word.substring(endPatternStartIdx,word.length()).equals(endPattern)){
+                System.out.println("DA");
+            }
+     ```
+
+    <리팩토링 후>
+    ``` java
+    if(word.startsWith(startPattern)&& word.endsWith(endPattern)){
+                System.out.println("DA");
+            }
+    ```
+    
+    
+
+***2) StringIndexOutOfBounds***   
+   범위초과 오류가 발생하였다. 암호 패턴 길이가 파일 길이보다 크면 발생하는 문제이다.
+
+   기존 로직에서
+   ```java
+    if(word.substring(0,idx).equals(startPattern)&& word.substring(endPatternStartIdx,word.length()).equals(endPattern))
+   ```
+   endPatternStartIdx가 word 길이보다 크면 이런 오류가 발생한다.
+
+   반례찾기는 어렵기 때문에 계속 부딪히며 데이터들을 쌓아야겠다. 
+

@@ -4,34 +4,25 @@ import java.io.InputStreamReader;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-            BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-            String[] raw=br.readLine().split(" ");
+        String[] nk = br.readLine().split(" ");
+        int n = Integer.parseInt(nk[0]);
+        int k = Integer.parseInt(nk[1]);
 
-            int N=Integer.parseInt(raw[0]);
-            int K=Integer.parseInt(raw[1]);
+        int[] psum = new int[n + 1]; // 누적 합 배열
+        int ret = Integer.MIN_VALUE; // 최댓값 초기화
+        
+        String[] rawInput=br.readLine().split(" ");
+        
+        for (int i = 1; i <= n; i++) {
+            int temp = Integer.parseInt(rawInput[i-1]);
+            psum[i] = psum[i - 1] + temp;
+        }
+        for (int i = k; i <= n; i++) {
+            ret = Math.max(ret, psum[i] - psum[i - k]);
+        }
 
-            String[] rawNumbers=br.readLine().split(" ");
-            int[] numbers=new int[rawNumbers.length+1];
-
-            for (int i=1;i<=N;i++){
-                numbers[i]=Integer.parseInt(rawNumbers[i-1]);
-            }
-
-            int[] dp=new int[N+1];
-
-            for (int i=1;i<=N;i++){
-                if (i<=K){
-                    dp[i]=dp[i-1]+numbers[i];
-                }else{
-                    dp[i]=dp[i-1]+numbers[i]-numbers[i-K];
-                }
-            }
-
-            int max=Integer.MIN_VALUE;
-            for (int i=K;i<=N;i++){
-                max=Math.max(max,dp[i]);
-            }
-            System.out.println(max);
+        System.out.println(ret);
     }
 }

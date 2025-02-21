@@ -11,10 +11,10 @@ string s;
 void go(int here) {
 	if (here == n + 1) {
 		int sum = 0;
-		for (int i = 1; i <= (1 << (n - 1)); i *= 2) {
+		for (int i = 0; i < n;i++) {
 			int cnt = 0;
 			for (int j = 1; j <= n; j++) {
-				if (a[j] & i) cnt++;
+				if (a[j] & (1<<i)) cnt++;
 			}
 			sum += min(cnt, n - cnt);
 		}
@@ -37,13 +37,9 @@ int main() {
 		cin >> s;
 		for (int j = s.length()-1; j >=0; j--) {
 			if (s[j] == 'T') a[i] = a[i] | value;
-			//cout << s[j]<< " "<< a[i] << "\n";
 			value *= 2;
 		}
 	}
-	//cout << a[1];
-	//cout << a[2];
-	//cout << a[3];
 	go(1);
 	cout << ret;
 	return 0;

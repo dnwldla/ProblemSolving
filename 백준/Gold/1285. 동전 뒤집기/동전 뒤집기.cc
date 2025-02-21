@@ -35,12 +35,16 @@ int main() {
 	for (int i = 1; i <= n; i++) {
 		int value = 1;
 		cin >> s;
-		for (int j = 0; j < s.length(); j++) {
+		for (int j = s.length()-1; j >=0; j--) {
 			if (s[j] == 'T') a[i] = a[i] | value;
+			//cout << s[j]<< " "<< a[i] << "\n";
 			value *= 2;
 		}
 	}
+	//cout << a[1];
+	//cout << a[2];
+	//cout << a[3];
 	go(1);
-	cout<<ret;
+	cout << ret;
 	return 0;
 }

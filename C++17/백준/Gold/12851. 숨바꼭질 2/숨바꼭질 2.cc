@@ -18,7 +18,7 @@ int main(){
     
     while (!q.empty()){
         int now=q.front(); q.pop();
-        //if (now==K) break;
+        if (now==K) break;
         for (int next:{now-1,now+1,now*2}){
             if (0<=next && next<=200000){
                 if (!visited[next]){

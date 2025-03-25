@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 int N,K;
-const int MAX = 200000; 
+const int MAX = 100000; 
 int visited[MAX+4];
 long long cnt[MAX+4];
 queue<int> q;
@@ -20,7 +20,7 @@ int main(){
         int now=q.front(); q.pop();
         if (now==K) break;
         for (int next:{now-1,now+1,now*2}){
-            if (0<=next && next<=200000){
+            if (0<=next && next<=MAX){
                 if (!visited[next]){
                     q.push(next);
                     visited[next]=visited[now]+1;

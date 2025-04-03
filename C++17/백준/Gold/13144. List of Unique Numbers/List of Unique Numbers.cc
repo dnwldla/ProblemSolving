@@ -1,8 +1,10 @@
+//5-H
 #include<bits/stdc++.h>
 using namespace std; 
 int const MAX=1000000;
-int lo,hi,cnt[MAX],N,ar[MAX];
+int lo,hi,N,ar[MAX];
 long long ret;
+bool visited[MAX];
 int main(){
     cin>>N;
     for (int i =0;i<N;i++){
@@ -10,12 +12,12 @@ int main(){
     }
     
     while (hi<N){
-        if (!cnt[ar[hi]]){ //겹치면 
-            cnt[ar[hi]]++;
+        if (!visited[ar[hi]]){
+            visited[ar[hi]]=true;
             hi++;
-        }else{ //중복수가 등장하면
+        }else{
             ret+=(hi-lo);
-            cnt[ar[lo]]--;
+            visited[ar[lo]]=false;
             lo++;
         }
     }

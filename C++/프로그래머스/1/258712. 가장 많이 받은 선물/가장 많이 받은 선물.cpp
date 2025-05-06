@@ -3,10 +3,46 @@
 using namespace std;
 vector<int> cmp;
 map<string,int> idxMap;
-int graph[MAX_N][MAX_N],flag[MAX_N][MAX_N];
+int graph[MAX_N][MAX_N];
 int jisu[MAX_N],visited[MAX_N],ans[MAX_N];
 int n;
 
+void compare(){
+    int idx1=cmp[0],idx2=cmp[1];
+    
+    int cmp1=graph[idx1][idx2],cmp2=graph[idx2][idx1];
+    
+    //선물을 주고받지 않은 경우
+    
+    //같은 수의 선물을 주고 받은 경우
+    
+    if ((cmp1==cmp2) || (cmp1==0 && cmp2==0)){
+        //선물지수가 달라야 함
+        if (jisu[idx1]!=jisu[idx2]){
+            //지수가 큰 사람 +1
+            if (jisu[idx1]>jisu[idx2]) ans[idx1]++;
+            else ans[idx2]++;
+        }
+    }else{ //선물 수로 비교
+        if (cmp1>cmp2) ans[idx1]++;
+        else ans[idx2]++;  
+    }
+    
+}
+void findCase(int start,int cnt){
+    
+    if (cnt==2){
+        compare();
+    }
+    
+    for (int i=start;i<n;i++){
+        if (!visited[i]){
+            visited[i]=1; cmp.push_back(i);
+            findCase(i+1,cnt+1);
+            visited[i]=0; cmp.pop_back();
+        }
+    }
+}
 int solution(vector<string> friends, vector<string> gifts) {
     int answer = 0;
     
@@ -27,6 +63,7 @@ int solution(vector<string> friends, vector<string> gifts) {
     //선물 그래프 
     n=friends.size();
     
+    
     //make gift summary: map
     //준 선물
     int i=0;
@@ -40,28 +77,9 @@ int solution(vector<string> friends, vector<string> gifts) {
         i++;
     }
     
-    for (int i=0;i<n;i++){
-        for (int j=0;j<n;j++){
-            if (i==j) continue;
-            if (flag[i][j] || flag[j][i]) continue;
-           
-            int cmp1=graph[i][j],cmp2=graph[j][i];
     
-            if ((cmp1==cmp2) || (cmp1==0 && cmp2==0)){
-            //선물지수가 달라야 함
-            if (jisu[i]!=jisu[j]){
-            //지수가 큰 사람 +1
-            if (jisu[i]>jisu[j]) ans[i]++;
-            else ans[j]++;
-        }
-    }else{ //선물 수로 비교
-        if (cmp1>cmp2) ans[i]++;
-        else ans[j]++;  
-        }
-        flag[i][j]=1;flag[j][i]=1;
-    }
-}
-    
+    //완탐으로 경우의 수
+    findCase(0,0);
     for (int i=0;i<n;i++) answer=max(answer,ans[i]);
     return answer;
 }

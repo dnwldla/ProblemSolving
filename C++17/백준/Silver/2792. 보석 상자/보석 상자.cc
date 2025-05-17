@@ -1,36 +1,39 @@
 #include <bits/stdc++.h>
 using namespace std;
-typedef long long ll;
-ll n,m,a[300004],ret=1e18;
+#define MAX 1000000001
+int N,M,k,ret,ans;
+vector<int> jew;
 
-bool check(ll mid){ //
-    ll num=0;
-    //7 4를 4로 나누자
-    for (int i=0;i<m;i++){ //보석 개에 대여
-        num+=a[i]/mid; //보석 개수를 mid로 나누어서 받는 사람 출력
-        if (a[i]%mid) num++; // 나누어떨어지지 않는다면 1 증가
+int check(int mid){
+    int cnt=0;
+    for (auto j:jew){
+        cnt+=(j/mid);
+        if (j%mid) cnt++;
     }
-    return n>=num; //사람수가 더 많다면 true return
+    return cnt;
 }
 int main(){
-    cin>>n>>m;
-    ll lo=1,hi=0,mid;
-
-    for (int i=0;i<m;i++){
-        cin>>a[i];
-        hi=max(hi,a[i]); //보석의 개수가 제일 많음
+    cin>>N>>M;
+    ans=MAX;
+    while (M--){
+        cin>>k;
+        jew.push_back(k);
     }
-    //5 2 //사람 다섯명 
-    //7
-    //4
+
+    sort(jew.begin(),jew.end());
+
+    int lo=1;int hi=jew[jew.size()-1];
+    int mid=(lo+hi)/2;
 
     while (lo<=hi){
-        mid=(lo+hi)/2; // mid는 4
-        if (check(mid)){ //사람 수가 더 많다면
-            ret=min(ret,mid);
+        mid=(lo+hi)/2;
+        ret=check(mid);
+
+        if (ret>N) lo=mid+1;
+        else{
             hi=mid-1;
-        }else lo=mid+1; //보석을 분배한 사람이 더 많다면
+            ans=min(ans,mid);
+        }
     }
-    cout<<ret;
-    //질투심이 뭔데..? 
+    cout<<ans;
 }

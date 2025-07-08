@@ -1,42 +1,60 @@
 import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.Scanner;
 
-public class Main{
+public class Main {
     public static void main(String[] args) throws IOException {
         int M;
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
-
         M = Integer.parseInt(br.readLine());
-        int[] cnt = new int[21];
+        StringBuilder sb= new StringBuilder();
+        int ret=0;
 
-        for (int i = 0; i < M; i++) {
-            String line = br.readLine();
-            String[] ar = line.split(" ");
-            String ins = ar[0];
-            int num = 0;
-
-            if (ar.length == 2) {
-                num = Integer.parseInt(ar[1]);
+        for (int i=0;i<M;i++){
+            String s = br.readLine();
+            String[] ar=s.split(" ");
+            String ins=ar[0];
+            int num=0;
+            if (ar.length==2){
+                num=Integer.parseInt(ar[1]);
             }
 
-            if (ins.equals("add")) {
-                cnt[num] = 1;
-            } else if (ins.equals("remove")) {
-                cnt[num] = 0;
-            } else if (ins.equals("check")) {
-                sb.append(cnt[num]).append('\n');
-            } else if (ins.equals("toggle")) {
-                if (cnt[num] == 1) cnt[num] = 0;
-                else cnt[num] = 1;
-            } else if (ins.equals("all")) {
-                for (int j = 1; j <= 20; j++) cnt[j] = 1;
-            } else if (ins.equals("empty")) {
-                for (int j = 1; j <= 20; j++) cnt[j] = 0;
+            //add
+            if (ins.equals("add")){
+                ret=ret|(1<<(num-1));
+           
+            }
+            //rempve
+            else if (ins.equals("remove")){
+                //1이면 0 , 0이면 stay->0으로 바꾸는 건 & 연산
+                ret&=~(1<<(num-1));
+
+                //if (cnt[num]==1) cnt[num]=0;
+            }
+
+            //check
+            else if (ins.equals("check")){
+                if ((ret&(1<<(num-1)))!=0) sb.append("1\n");
+                else sb.append("0\n");
+            }
+
+            //toggle
+            else if (ins.equals("toggle")){
+                ret=ret^(1<<(num-1));
+            }
+
+            else if (ins.equals("all")){
+                ret=(1<<20)-1;
+            }
+
+            //empty
+            else if (ins.equals("empty")){
+                ret=0;
             }
         }
-
-        System.out.print(sb);
+        System.out.println(sb);
     }
+
 }

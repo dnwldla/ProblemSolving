@@ -1,26 +1,35 @@
-import java.util.*;
+import java.util.Scanner;
 
 public class Main {
+    static int[] T;
+    static int[] P;
+    static int N,ret;
     public static void main(String[] args) {
+        ret=0;
         Scanner sc = new Scanner(System.in);
-        int N = sc.nextInt();
-        int[] T = new int[N + 2];
-        int[] P = new int[N + 2];
-        int[] dp = new int[N + 2];
+        N=sc.nextInt();
+        T=new int[N+1];
+        P=new int[N+1];
+        for (int i=0;i<N;i++){
+            T[i]=sc.nextInt(); P[i]=sc.nextInt();
+        }
+        dfs(0,0);
+        System.out.println(ret);
 
-        for (int i = 1; i <= N; i++) {
-            T[i] = sc.nextInt();
-            P[i] = sc.nextInt();
+    }
+
+    static void dfs(int idx,int tot){
+        //base case
+        if (idx>=N){
+            ret=Math.max(ret,tot);
+            return;
         }
 
-        for (int i = N; i >= 1; i--) {
-            if (i + T[i] - 1 <= N) {
-                dp[i] = Math.max(P[i] + dp[i + T[i]], dp[i + 1]);
-            } else {
-                dp[i] = dp[i + 1];
-            }
+        //상담했을 떄
+        if (idx+T[idx]<=N){
+            dfs(idx+T[idx],tot+P[idx]);
         }
-
-        System.out.println(dp[1]);
+        //상담하지 않을 때
+        dfs(idx+1,tot);
     }
 }

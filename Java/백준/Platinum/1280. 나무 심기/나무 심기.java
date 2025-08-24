@@ -1,56 +1,94 @@
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-    static final int MAX_N = 200_004;
+    static final int MAX = 200_010;
     static final long MOD = 1_000_000_007L;
 
-    static long[] treeCnt = new long[MAX_N + 2];
-    static long[] treeSum = new long[MAX_N + 2];
+    static int N;
+    static int[] arr;
+    static long[] cntFenwick;
+    static long[] distFenwick;
 
-    static long prefixSum(long[] tree, int idx) {
-        long res = 0;
-        int i = idx;
-        while (i > 0) {
-            res += tree[i];
-            i -= (i & -i);
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+
+        st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        arr = new int[N + 1];
+
+        for (int i = 1; i <= N; i++) {
+            if (!st.hasMoreTokens()) st = new StringTokenizer(br.readLine());
+            int a = Integer.parseInt(st.nextToken());
+            a++;
+            arr[i] = a;
+        }
+
+        cntFenwick = new long[MAX + 1];
+        distFenwick = new long[MAX + 1];
+
+        updateCnt(arr[1], 1);
+        updateDist(arr[1], arr[1]);
+
+        long answer = 1L;
+
+        for (int i = 2; i <= N; i++) {
+            int x = arr[i];
+
+            long leftCnt  = queryCnt(x - 1);
+            long rightCnt = queryCnt(MAX) - queryCnt(x);
+
+            long leftDist  = queryDist(x - 1);
+            long rightDist = queryDist(MAX) - queryDist(x);
+
+            long leftResult  = ((long)x * leftCnt - leftDist) % MOD;
+            if (leftResult < 0) leftResult += MOD;
+
+            long rightResult = (rightDist - (long)x * rightCnt) % MOD;
+            if (rightResult < 0) rightResult += MOD;
+
+            long result = (leftResult + rightResult) % MOD;
+            if (result < 0) result += MOD;
+
+            answer = (answer * result) % MOD;
+
+            updateCnt(x, 1);
+            updateDist(x, x);
+        }
+
+        System.out.println(answer % MOD);
+    }
+
+    static void updateCnt(int pos, long delta) {
+        while (pos <= MAX) {
+            cntFenwick[pos] += delta;
+            pos += (pos & -pos);
+        }
+    }
+
+    static void updateDist(int pos, long value) {
+        while (pos <= MAX) {
+            distFenwick[pos] += value;
+            pos += (pos & -pos);
+        }
+    }
+
+    static long queryCnt(int pos) {
+        long res = 0L;
+        while (pos > 0) {
+            res += cntFenwick[pos];
+            pos -= (pos & -pos);
         }
         return res;
     }
 
-    static long rangeSum(long[] tree, int s, int e) {
-        if (s > e) return 0;
-        return prefixSum(tree, e) - prefixSum(tree, s - 1);
-    }
-
-    static void update(long[] tree, int idx, long val) {
-        int i = idx;
-        while (i <= MAX_N) {
-            tree[i] += val;
-            i += (i & -i);
+    static long queryDist(int pos) {
+        long res = 0L;
+        while (pos > 0) {
+            res += distFenwick[pos];
+            pos -= (pos & -pos);
         }
-    }
-
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        long ret = 1;
-
-        for (int i = 1; i <= n; i++) {
-            int value = sc.nextInt();
-            value++; // 1-based 인덱싱 보정
-
-            if (i != 1) {
-                long left  = (long) value * rangeSum(treeCnt, 1, value - 1) - rangeSum(treeSum, 1, value - 1);
-                long right = rangeSum(treeSum, value + 1, MAX_N) - (long) value * rangeSum(treeCnt, value + 1, MAX_N);
-                long add = (left + right) % MOD;
-                if (add < 0) add += MOD;
-                ret = (ret * add) % MOD;
-            }
-
-            update(treeCnt, value, 1);
-            update(treeSum, value, value);
-        }
-
-        System.out.println(ret);
+        return res;
     }
 }

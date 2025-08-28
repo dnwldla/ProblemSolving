@@ -75,7 +75,7 @@ public class Main {
                 int distDiff=!reverse?getTimeDiff(map[cr][cc],map[nx][ny]):getTimeDiff(map[nx][ny],map[cr][cc]);
 
                 // d 초과하면 continue: 중복 조건임
-                if (cd+distDiff>d){ //cd 대신 dist[cd][cc]로 하면 안될까?
+                if (dist[cr][cc]+distDiff>d){ //cd 대신 dist[cd][cc]로 하면 안될까?
                     continue;
                 }
 

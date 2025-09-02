@@ -1,15 +1,13 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.IOException;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.io.*;
 
-public class Main{
-    public static void main(String[] args) throws IOException {
+public class Main {
+    static int N;
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
         int[] seq = new int[N];
         int[] dp = new int[N];
-
         StringTokenizer st = new StringTokenizer(br.readLine());
         for (int i = 0; i < N; i++) {
             seq[i] = Integer.parseInt(st.nextToken());
@@ -17,13 +15,20 @@ public class Main{
 
         for (int i=0;i<N;i++){
             dp[i]=1;
-            for (int j=0;j<i;j++){ //이전
-                if (seq[j]<seq[i] && dp[j]>=dp[i]) dp[i]=dp[j]+1;
+        }
+
+        for (int i=0;i<N;i++){ //기준
+            for (int j=0;j<i;j++){
+                //i번째가 j보다 seq가 크고 j번째보다 dp 값이 작다면 +1
+                if (seq[i]>seq[j] && dp[i]<=dp[j]) dp[i]=dp[j]+1;
             }
         }
-        
-        int ret=0;
-        for (int i=0;i<N;i++) ret=Math.max(ret,dp[i]);
-        System.out.println(ret);
+
+        int ans=0;
+        for (int i=0;i<N;i++){
+            ans=Math.max(ans,dp[i]);
+        }
+        System.out.println(ans);
+
     }
 }

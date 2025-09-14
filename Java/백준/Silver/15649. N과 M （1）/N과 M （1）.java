@@ -28,7 +28,9 @@ public class Main {
         for (int i=1;i<=N;i++){
             if (i==cur) continue;
             if (visited[i]) continue;
+            visited[i]=true;
             go(i,cnt+1);
+            visited[i]=false;
             ar.remove(ar.size()-1);
 
         }

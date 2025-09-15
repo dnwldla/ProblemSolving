@@ -1,40 +1,36 @@
-import java.util.*;
+    import java.util.Scanner;
 
 public class Main {
     static int N,M;
     static boolean[] visited;
-    static List<Integer> ar=new ArrayList<>();
+    static int[] arr;
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         N=sc.nextInt(); M=sc.nextInt();
-       visited=new boolean[N+1];
+        visited=new boolean[N+1];
+        arr=new int[N+1];
 
-        for (int i=1;i<=N;i++){
-            go(i,1);
-            ar.remove(ar.size()-1);
-        }
+        go(1);
     }
 
-    static void go(int cur,int cnt){
-        ar.add(cur);
-        visited[cur]=true;
-        if (cnt==M){
-            for (Integer a:ar){
-                System.out.print(a+" ");
+    static void go(int cnt){
+
+        if (cnt==M+1){
+            StringBuilder sb=new StringBuilder();
+            for (int i=1;i<cnt;i++){
+                sb.append(arr[i]+" ");
             }
-            System.out.println();
+            System.out.println(sb.toString());
         }
 
         for (int i=1;i<=N;i++){
-            if (i==cur) continue;
-            if (visited[i]) continue;
-            visited[i]=true;
-            go(i,cnt+1);
-            visited[i]=false;
-            ar.remove(ar.size()-1);
-
+            if (!visited[i]){
+                visited[i]=true;
+                arr[cnt]=i;
+                go(cnt+1);
+                visited[i]=false;
+            }
         }
-        visited[cur]=false;
-
     }
+
 }

@@ -33,7 +33,7 @@ public class Main {
         }
 
         if (map[x][y]==1){
-            for (int k=5;k>=1;k--){ //탐색 개수
+            for (int k=1;k<=5;k++){ //탐색 개수
                 //모두 1이면 붙이고
                 if (check(x,y,k) && paper[k]>=1){
                     //붙인다

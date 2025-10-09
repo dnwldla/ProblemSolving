@@ -1,4 +1,4 @@
-    import java.util.Scanner;
+import java.util.Scanner;
 
 public class Main {
     static int N,M;
@@ -10,27 +10,28 @@ public class Main {
         visited=new boolean[N+1];
         arr=new int[N+1];
 
-        go(1);
+        go(0);
     }
 
     static void go(int cnt){
 
-        if (cnt==M+1){
-            StringBuilder sb=new StringBuilder();
-            for (int i=1;i<cnt;i++){
+        if (cnt==M){
+             StringBuilder sb=new StringBuilder();
+            for (int i=0;i<cnt;i++){
                 sb.append(arr[i]+" ");
             }
             System.out.println(sb.toString());
         }
 
-        for (int i=1;i<=N;i++){
-            if (!visited[i]){
-                visited[i]=true;
-                arr[cnt]=i;
-                go(cnt+1);
-                visited[i]=false;
-            }
-        }
+      for (int i=1;i<=N;i++){
+          if (!visited[i]){
+              visited[i]=true;
+              arr[cnt]=i;
+              go(cnt+1);
+              visited[i]=false;
+          }
+      }
     }
+
 
 }

@@ -11,14 +11,14 @@ class Solution {
         StringBuilder sb=new StringBuilder();
 
         int dist0 = Math.abs(R - X) + Math.abs(C - Y);
-        if (dist0 > K || ((K - dist0) & 1) == 1) return "impossible";
+        if (dist0 > K || ((K - dist0) %2) == 1) return "impossible";
 
         dfs(x,y,0,sb);
         return answer.isEmpty() ? "impossible" : answer;
     }
 
     static void dfs(int x,int y,int cnt, StringBuilder sb){
-        if (!answer.isEmpty()) return;
+        //if (!answer.isEmpty()) return;
 
         if (cnt==K){
             if (x==R && y==C) answer=sb.toString();

@@ -29,7 +29,7 @@ class Solution {
            // System.out.println("apporved "+s4)
         } 
         //마침표가 마지막에 있으면 제거한다
-         if (s4.length()>1 && s4.charAt(s4.length()-1)=='.') s4=s4.substring(0,s4.length()-1);
+         if (s4.endsWith(".")) s4=s4.substring(0,s4.length()-1);
         
          //5단계
         String s5=s4;

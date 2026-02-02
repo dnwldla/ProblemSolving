@@ -1,60 +1,66 @@
+import java.io.*;
 import java.util.*;
 
 public class Main {
-    static int N, M;
-    static int[][] graph;
-    static int[][] dp;
+    static int N, M, ret;
+    static char[][] graph;
     static boolean[][] visited;
-    static int[] dx = {1, -1, 0, 0};
-    static int[] dy = {0, 0, -1, 1};
+    static int[][] dist;
+    static int[] dx = {0, 0, -1, 1};
+    static int[] dy = {1, -1, 0, 0};
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        N = sc.nextInt();
-        M = sc.nextInt();
-
-        graph = new int[N][M];
-        dp = new int[N][M];
-        visited = new boolean[N][M];
-
-        for (int i = 0; i < N; i++) {
-            String s = sc.next();
-            for (int j = 0; j < M; j++) {
-                char c = s.charAt(j);
-                if (c == 'H') graph[i][j] = -1;
-                else graph[i][j] = c - '0';
-            }
-        }
-
-        System.out.println(go(0, 0));
+    static int changeToInt(char c) {
+        return c - '0';
     }
 
-    static int go(int x, int y) {
-        if (outOfRange(x, y)) return 0;
+    static void go(int x, int y, int cnt) {
+        if (x < 0 || x >= N || y < 0 || y >= M || graph[x][y] == 'H') return;
 
         if (visited[x][y]) {
             System.out.println(-1);
             System.exit(0);
         }
-        if (dp[x][y] != 0) return dp[x][y];
+
+        if (dist[x][y] >= cnt) return;
+        dist[x][y] = cnt;
 
         visited[x][y] = true;
 
-        int jump = graph[x][y];
-        int best = 0;
-
+        int k = changeToInt(graph[x][y]);
         for (int i = 0; i < 4; i++) {
-            int nx = x + dx[i] * jump;
-            int ny = y + dy[i] * jump;
-            best = Math.max(best, go(nx, ny) + 1);
+            int nx = x + dx[i] * k;
+            int ny = y + dy[i] * k;
+            go(nx, ny, cnt + 1);
         }
 
         visited[x][y] = false;
-        dp[x][y] = best;
-        return best;
     }
 
-    static boolean outOfRange(int x, int y) {
-        return x < 0 || x >= N || y < 0 || y >= M || graph[x][y] == -1;
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+
+        graph = new char[N][M];
+        visited = new boolean[N][M];
+        dist = new int[N][M];
+
+        for (int i = 0; i < N; i++) {
+            String s = br.readLine();
+            for (int j = 0; j < M; j++) {
+                graph[i][j] = s.charAt(j);
+            }
+        }
+
+        go(0, 0, 1);
+
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                ret = Math.max(ret, dist[i][j]);
+            }
+        }
+
+        System.out.println(ret);
     }
 }

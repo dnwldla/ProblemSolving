@@ -1,10 +1,13 @@
-select member_name, review_text,date_format(review_date,'%Y-%m-%d') as "review_date"
-from rest_review r
-inner join member_profile m
-on r.member_id=m.member_id
-where r.member_id=
-(select member_id from rest_review
-group by member_id
-order by count(review_score) desc
-limit 1)
-order by review_date,review_text
+-- 회원의 리뷰량 등수를 정한다
+select mf.member_name,c.review_text,date_format(c.review_date,"%Y-%m-%d") as review_date
+from member_profile mf
+join 
+(select a.member_id, a.review_text,a.review_date from rest_review a
+inner join (
+select member_id, dense_rank() over (order by count(*) desc) as r
+from rest_review
+group by member_id) b
+on a.member_id=b.member_id
+where r=1) c
+on mf.member_id=c.member_id
+order by review_date, review_text

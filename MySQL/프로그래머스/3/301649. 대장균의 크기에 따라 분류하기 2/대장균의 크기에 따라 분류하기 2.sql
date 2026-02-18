@@ -1,12 +1,11 @@
 select id,
-case
-    when r<=0.25 then 'CRITICAL'
-    when r<=0.5 then 'HIGH'
-    when r<=0.75 then 'MEDIUM'
+case when size<=0.25 then 'CRITICAL'
+    when size<=0.5 then 'HIGH'
+    when size<=0.75 then 'MEDIUM'
     else 'LOW'
-    end as 'COLONY_NAME'
-from
-(
-select id, percent_rank() over (order by size_of_colony desc) as r
-from ecoli_data) sub
-order by sub.id;
+end as colony_name
+from(
+
+select id, percent_rank() over (order by size_of_colony desc) as size
+from ecoli_data) a
+order by id

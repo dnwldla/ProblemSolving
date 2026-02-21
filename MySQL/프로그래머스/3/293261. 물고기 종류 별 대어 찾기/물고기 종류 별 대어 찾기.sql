@@ -1,6 +1,8 @@
-select a.id,b.fish_name,a.length from fish_info a
-left outer join fish_name_info b
-on a.fish_type=b.fish_type
-where (a.fish_type, a.length) in (
-select fish_type, max(length) from fish_info group by fish_type
-)
+-- fish type 기준으로 
+select id,fish_name,length from (
+select fi.id,fni.fish_name, length, rank() over (partition by fi.fish_type order by length desc) as r
+from fish_info fi
+join fish_name_info fni on fi.fish_type=fni.fish_type
+) tb
+where r=1
+order by id
